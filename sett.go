@@ -25,13 +25,19 @@ func executeCommand(command string) ([]byte, error) {
 }
 
 func main() {
-	// Get host and port from command-line arguments or fallback to embedded values
-	if len(os.Args) > 2 {
-		host = os.Args[1]
-		port = os.Args[2]
+	// Check if the host and port are set via ldflags
+	if host != "" && port != "" {
+		// Use the embedded host and port
+		fmt.Printf("Using embedded host and port: %s:%s\n", host, port)
 	} else {
-		fmt.Println("Usage: sett <host> <port>")
-		return
+		// Get host and port from command-line arguments
+		if len(os.Args) > 2 {
+			host = os.Args[1]
+			port = os.Args[2]
+		} else {
+			fmt.Println("Usage: sett <host> <port>")
+			return
+		}
 	}
 
 	if host == "" || port == "" {
